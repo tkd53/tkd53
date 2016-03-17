@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <vector>
 
 #include "../base/kkci.hpp"
@@ -36,6 +37,22 @@ protected:
   DictionaryInterface() {}
   virtual ~DictionaryInterface() {}
 };
+
+
+class ScopedDictionaryResetter {
+public:
+  ScopedDictionaryResetter(shared_ptr<DictionaryInterface> dictionary)
+    : dictionary_(dictionary) {
+  }
+
+  ~ScopedDictionaryResetter() {
+    dictionary_->Clear();
+  }
+
+private:
+  shared_ptr<DictionaryInterface> dictionary_;
+};
+
 
 } // dictionary
 } // lime
