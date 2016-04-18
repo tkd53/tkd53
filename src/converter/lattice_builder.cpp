@@ -12,7 +12,7 @@ LatticeBuilder::LatticeBuilder(shared_ptr<DictionaryInterface> dictionary)
 
 unique_ptr<Lattice> LatticeBuilder::Build(
     const KkciString &str, const Token begin_token, const Token end_token) {
-  dictionary_->Clear();  // 念のためClearする
+  ScopedDictionaryResetter resetter(dictionary_);
 
   const size_t size = str.size();
   unique_ptr<vector<shared_ptr<Node> > > nodes(
@@ -46,8 +46,6 @@ unique_ptr<Lattice> LatticeBuilder::Build(
       (*end_nodes)[end_pos].push_back(node);
     }
   }
-
-  dictionary_->Clear();  // Tear down
 
   return unique_ptr<Lattice>(new Lattice(
       size + 3, move(nodes), move(begin_nodes), move(end_nodes)));
