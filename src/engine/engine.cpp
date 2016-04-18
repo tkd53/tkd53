@@ -21,7 +21,13 @@ void Engine::ListCandidates(const KkciString &input,
        it != input.end(); ++it) {
     dictionary_->PushBack(*it);
   }
-  dictionary_->Lookup(output);
+  vector<const Entry*> tmp;
+  dictionary_->Lookup(&tmp);
+  for (size_t i = 0; i < tmp.size(); i++) {
+    if (tmp[i]->kkci_string == input) {
+      output->push_back(tmp[i]);
+    }
+  }
 }
 
 } // converter
