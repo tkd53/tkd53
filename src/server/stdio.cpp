@@ -1,40 +1,50 @@
+#include <cstring>
 #include <iostream>
 
-#include "engine/engine.hpp"
-#include "converter/bigram_converter.hpp"
-#include "dictionary/map_dictionary.hpp"
+#include "stdio.hpp"
 
-#include "request.hpp"
-
+namespace lime {
+namespace server {
 using namespace std;
-using namespace lime::base::kkci;
-using namespace lime::base::token;
-using namespace lime::converter;
-using namespace lime::dictionary;
-using namespace lime::server;
-using namespace lime::engine;
 
-const string kNgramFreqFile = "../var/WordMarkov.freq";
 
-const string kWordKkciMappingFile = "../var/WordKkci.text";
-
-int main(void) {
-  shared_ptr<Bigram> bigram(new Bigram());
-  bigram->Init(ifstream(kNgramFreqFile, ios::in));
-
-  shared_ptr<MapDictionary> dict(new MapDictionary());
-  dict->Init(ifstream(kWordKkciMappingFile, ios::in));
-
-  Engine engine(shared_ptr<AbstractConverter>(
-      new BigramConverter(bigram,
-          shared_ptr<LatticeBuilder>(new LatticeBuilder(dict)))));
-
-  string request_string;
-  string response_string;
-  while (getline(cin, request_string)) {
-    cerr << "<" << request_string << ">" << endl;
-    if (HandleRequest(request_string, &engine, &response_string)) {
-      cout << response_string;
-    }
-  }
+StdioClient::StdioClient(const string input) : input_(input) {
 }
+
+
+bool StdioClient::Read(char* const read_buffer, const size_t size) {
+  if (size < input_.size()) {
+    return false;
+  }
+  strncpy(read_buffer, input_.c_str(), input_.size());
+  return true;
+}
+
+
+bool StdioClient::Write(const string &response) {
+  cout << response << endl;
+  return true;
+}
+
+
+void StdioClient::Close() {
+}
+
+
+StdioAcceptor::StdioAcceptor() {
+}
+
+
+void StdioAcceptor::Init() {
+}
+
+
+Client* StdioAcceptor::Accept() {
+  string request_string;
+  getline(cin, request_string);
+  return new StdioClient(request_string);
+}
+
+
+} // server
+} // lime
