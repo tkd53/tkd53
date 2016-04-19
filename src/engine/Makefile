@@ -1,13 +1,13 @@
 TARGETS_DIR = ../../bin
-# TARGETS = ${TARGETS_DIR}
+TARGETS = engine.o
 
 TESTS_INSTALL_DIR = ../../tests/bin/engine
 GTEST_OBJ_DIR = ${TESTS_INSTALL_DIR}/../gtest
 GTEST_DIR = ../third_party/googletest/googletest
 GTEST_DEPS = ${GTEST_OBJ_DIR}/libgtest_main.a ${GTEST_OBJ_DIR}/libgtest.a
 
-CXX=g++
-# CXX = clang++
+#CXX=g++
+CXX = clang++
 WARNING_OPTIONS = -Wall -Wextra -Weffc++ -Woverloaded-virtual -Werror # -fcolor-diagnostics
 INCLUDE_OPTIONS = -I../ -I${GTEST_DIR}/include/
 CXXFLAGS = $(WARNING_OPTIONS) $(INCLUDE_OPTIONS) -std=c++11
@@ -39,3 +39,6 @@ ${TESTS_INSTALL_DIR}:
 
 ../base/%.o: ../base/%.cpp
 	$(CXX) -o $@ -c $< $(CXXFLAGS)
+
+${TESTS_INSTALL_DIR}/engine_test:engine_test.o ../converter/bigram_converter.o ../converter/bigram.o ../dictionary/map_dictionary.o ../converter/lattice.o ../converter/lattice_builder.o engine.o ${GTEST_DEPS}
+	$(CXX) -o $@ $^ -lpthread

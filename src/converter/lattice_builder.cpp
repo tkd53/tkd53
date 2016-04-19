@@ -10,25 +10,20 @@ LatticeBuilder::LatticeBuilder(shared_ptr<DictionaryInterface> dictionary)
 }
 
 
-unique_ptr<Lattice> LatticeBuilder::Build(
+Lattice *LatticeBuilder::Build(
     const KkciString &str, const Token begin_token, const Token end_token) {
   ScopedDictionaryResetter resetter(dictionary_);
 
   const size_t size = str.size();
-  unique_ptr<vector<shared_ptr<Node> > > nodes(
-      new vector<shared_ptr<Node> >());
-  unique_ptr<vector<vector<shared_ptr<Node> > > > begin_nodes(
-      new vector<vector<shared_ptr<Node> > >(size + 2));
-  unique_ptr<vector<vector<shared_ptr<Node> > > > end_nodes(
-      new vector<vector<shared_ptr<Node> > >(size + 2 + 1));
+  vector<Node*> *nodes(new vector<Node*>());
+  vector<NodeList> *begin_nodes(new vector<NodeList>(size + 2));
+  vector<NodeList> *end_nodes(new vector<NodeList>(size + 2 + 1));
 
-  nodes->push_back(shared_ptr<Node>(
-      new Node({begin_token, nullptr, nullptr, 0})));
+  nodes->push_back(new Node({begin_token, nullptr, nullptr, 0}));
   (*begin_nodes)[0].push_back((*nodes)[0]);
   (*end_nodes)[1].push_back((*nodes)[0]);
 
-  nodes->push_back(shared_ptr<Node>(
-      new Node({end_token, nullptr, nullptr, 0})));
+  nodes->push_back(new Node({end_token, nullptr, nullptr, 0}));
   (*begin_nodes)[size + 1].push_back((*nodes)[1]);
   (*end_nodes)[size + 2].push_back((*nodes)[1]);
 
@@ -36,9 +31,8 @@ unique_ptr<Lattice> LatticeBuilder::Build(
     vector<const Entry*> entries;
     dictionary_->PushBack(str[pos]);
     dictionary_->Lookup(&entries);
-    for (vector<const Entry*>::iterator iter = entries.begin();
-         iter != entries.end(); ++iter) {
-      shared_ptr<Node> node(new Node({(*iter)->token, *iter, nullptr, 0}));
+    for (auto iter = begin(entries); iter != end(entries); ++iter) {
+      Node *node = new Node({(*iter)->token, *iter, nullptr, 0});
       nodes->push_back(node);
       const size_t begin_pos = pos - node->entry->kkci_string.size() + 2;
       const size_t end_pos = pos + 2;
@@ -47,8 +41,7 @@ unique_ptr<Lattice> LatticeBuilder::Build(
     }
   }
 
-  return unique_ptr<Lattice>(new Lattice(
-      size + 3, move(nodes), move(begin_nodes), move(end_nodes)));
+  return new Lattice(size + 3, nodes, begin_nodes, end_nodes);
 }
 
 

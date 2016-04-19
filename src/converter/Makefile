@@ -1,5 +1,5 @@
 TARGETS_DIR = ../../bin
-# TARGETS = ${TARGETS_DIR}
+TARGETS = bigram.o bigram_converter.o lattice.o lattice_builder.o
 
 TESTS_INSTALL_DIR = ../../tests/bin/converter
 GTEST_OBJ_DIR = ${TESTS_INSTALL_DIR}/../gtest
@@ -41,7 +41,4 @@ ${TESTS_INSTALL_DIR}:
 	$(CXX) -o $@ -c $< $(CXXFLAGS)
 
 ${TESTS_INSTALL_DIR}/bigram_test:bigram_test.o bigram.o ${GTEST_DEPS}
-	$(CXX) -o $@ $^ -lpthread
-
-${TESTS_INSTALL_DIR}/bigram_converter_test:bigram_converter_test.o bigram_converter.o bigram.o ../dictionary/map_dictionary.o lattice.o lattice_builder.o ${GTEST_DEPS}
 	$(CXX) -o $@ $^ -lpthread

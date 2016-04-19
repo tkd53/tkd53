@@ -111,24 +111,24 @@ bool Server::HandleRequest(const string &request_json,
 
 
 void Server::HandleConvert(const KkciString &str, string *response_json) {
-  Segments segments;
-  engine_->Convert(str, &segments);
+  deque<Node> nodes;
+  engine_->Convert(str, &nodes);
 
   stringstream ss;
   ss << "{\"result\":true,\"kkciSequence\":[";
-  for (size_t i = 0; i < segments.size(); i++) {
+  for (size_t i = 0; i < nodes.size(); i++) {
     if (0 < i) {
       ss << ",";
     }
     ss << "{";
-    ss << "\"token\":" << segments[i]->token;
-    ss << ",\"origin\":" << segments[i]->entry->origin;
+    ss << "\"token\":" << nodes[i].token;
+    ss << ",\"origin\":" << nodes[i].entry->origin;
     ss << ",\"kkciSequence\":[";
-    for (size_t j = 0; j < segments[i]->entry->kkci_string.size(); j++) {
+    for (size_t j = 0; j < nodes[i].entry->kkci_string.size(); j++) {
       if (0 < j) {
         ss << ",";
       }
-      ss << segments[i]->entry->kkci_string[j];
+      ss << nodes[i].entry->kkci_string[j];
     }
     ss << "]}";
   }
