@@ -13,9 +13,9 @@ $ cd bin && sh ./build.sh
 
 ### 実行
 #### かな漢字変換サーバの実行
-'''
+```
 cd bin && ./main
-'''
+```
 
 ## テスト
 tkd53はテストフレームワークに[googletest](https://github.com/google/googletest)を使用しています。
