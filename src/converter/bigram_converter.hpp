@@ -17,21 +17,14 @@ using namespace lime::dictionary;
 
 class BigramConverter : public AbstractConverter {
 public:
-  BigramConverter(shared_ptr<Bigram> bigram,
-                  shared_ptr<LatticeBuilder> lattice_builder);
+  BigramConverter(shared_ptr<Bigram> bigram);
 
-  virtual void Convert(const KkciString &string,
-                       Token begin_token,
-                       Token end_token,
-                       Segments *result) override;
+  virtual void Convert(Lattice *lattice) override;
 
 private:
-  void SetBestLeftNode(vector<shared_ptr<Node> > &lnodes,
-                       shared_ptr<Node> rnode);
+  void SetBestLeftNode(NodeList &lnodes, Node* rnode);
 
   shared_ptr<Bigram> bigram_;
-
-  shared_ptr<LatticeBuilder> lattice_builder_;
 };
 
 } // converter

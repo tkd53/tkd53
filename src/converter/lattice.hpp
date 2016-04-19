@@ -20,28 +20,29 @@ typedef double Cost;
 struct Node {
   const Token token;
   const Entry* const entry;
-  shared_ptr<Node> prev;
+  Node *prev;
   Cost cost_so_far;
 };
 
+typedef vector<Node*> NodeList;
 
 class Lattice {
 public:
   size_t GetColumnCount() const;
 
-  vector<shared_ptr<Node> > &GetBeginNodes(size_t pos);
+  NodeList &GetBeginNodes(size_t pos);
 
-  vector<shared_ptr<Node> > &GetEndNodes(size_t pos);
+  NodeList &GetEndNodes(size_t pos);
 
   Lattice(size_t column_count,
-          unique_ptr<vector<shared_ptr<Node> > > nodes,
-          unique_ptr<vector<vector<shared_ptr<Node> > > > begin_nodes,
-          unique_ptr<vector<vector<shared_ptr<Node> > > > end_nodes);
+          vector<Node*> *nodes,
+          vector<NodeList> *begin_nodes,
+          vector<NodeList> *end_nodes);
 private:
   const size_t column_count_;
-  const unique_ptr<vector<shared_ptr<Node> > > nodes_;
-  unique_ptr<vector<vector<shared_ptr<Node> > > > begin_nodes_;
-  unique_ptr<vector<vector<shared_ptr<Node> > > > end_nodes_;
+  const unique_ptr<vector<Node*> > nodes_;
+  unique_ptr<vector<NodeList> > begin_nodes_;
+  unique_ptr<vector<NodeList> > end_nodes_;
 };
 
 

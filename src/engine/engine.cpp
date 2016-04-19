@@ -5,14 +5,50 @@
 namespace lime {
 namespace engine {
 
-Engine::Engine(shared_ptr<AbstractConverter> converter,
-               shared_ptr<DictionaryInterface> dictionary)
-  : converter_(converter), dictionary_(dictionary) {
+namespace {
+
+Node *FindMinCostNode(const NodeList &nodes) {
+  Cost min_cost;
+  Node *node = nullptr;
+  for (auto it = begin(nodes); it != end(nodes); ++it) {
+    if (!node || (*it)->cost_so_far < min_cost) {
+      min_cost = (*it)->cost_so_far;
+      node = *it;
+    }
+  }
+  return node;
 }
 
-void Engine::Convert(const KkciString &input, Segments *output) {
-  converter_->Convert(input, kBOS, kBOS, output);
+} // namespace
+
+
+Engine::Engine(shared_ptr<AbstractConverter> converter,
+               shared_ptr<DictionaryInterface> dictionary)
+  : converter_(converter),
+    dictionary_(dictionary),
+    lattice_builder_(LatticeBuilder(dictionary)) {
 }
+
+void Engine::Convert(const KkciString &input, deque<Node> *output) {
+  unique_ptr<Lattice> closer(lattice_builder_.Build(input, kBOS, kBOS));
+  Lattice *lattice = closer.get();
+
+  converter_->Convert(lattice);
+
+  Node *last_node = FindMinCostNode(
+      lattice->GetEndNodes(lattice->GetColumnCount() - 1));
+  if (last_node == nullptr) {
+    throw runtime_error("failed to run viterbi.");
+  }
+
+  // begin_tokenとend_tokenはkBOSなので入れなくてよい
+  for (Node *node = last_node->prev; node->prev != nullptr;
+       node = node->prev) {
+    output->push_front(Node({
+        node->token, node->entry, node->prev, node->cost_so_far}));
+  }
+}
+
 
 void Engine::ListCandidates(const KkciString &input,
                             vector<const Entry*> *output) {
