@@ -1,5 +1,5 @@
 TARGETS_DIR = ../../bin
-TARGETS = ${TARGETS_DIR}/stdio ${TARGETS_DIR}/unix_domain_socket
+TARGETS = ${TARGETS_DIR}/main
 
 TESTS_INSTALL_DIR = ../../tests/bin/server
 GTEST_OBJ_DIR = ${TESTS_INSTALL_DIR}/../gtest

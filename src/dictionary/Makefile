@@ -1,5 +1,5 @@
 TARGETS_DIR = ../../bin
-# TARGETS = ${TARGETS_DIR}
+TARGETS = map_dictionary.o
 
 TESTS_INSTALL_DIR = ../../tests/bin/dictionary
 GTEST_OBJ_DIR = ${TESTS_INSTALL_DIR}/../gtest
