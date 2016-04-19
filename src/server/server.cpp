@@ -115,7 +115,7 @@ void Server::HandleConvert(const KkciString &str, string *response_json) {
   engine_->Convert(str, &nodes);
 
   stringstream ss;
-  ss << "{\"result\":true,\"kkciSequence\":[";
+  ss << "{\"result\":true,\"nodeSequence\":[";
   for (size_t i = 0; i < nodes.size(); i++) {
     if (0 < i) {
       ss << ",";
@@ -143,7 +143,7 @@ void Server::HandleListCandidates(const KkciString &str,
   engine_->ListCandidates(str, &output);
 
   stringstream ss;
-  ss << "{\"result\":true,\"kkciSequence\":[";
+  ss << "{\"result\":true,\"nodeSequence\":[";
   for (size_t i = 0; i < output.size(); i++) {
     if (0 < i) {
       ss << ",";
