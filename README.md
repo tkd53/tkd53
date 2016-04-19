@@ -1,11 +1,23 @@
 # tkd53: かな漢字変換システム
 
-## セットアップ
+## 使い方
+### セットアップ
 ```
 $ git submodule update --init
 ```
 
-## テストの実行
+### ビルド
+```
+$ cd bin && sh ./build.sh
+```
+
+### 実行
+#### かな漢字変換サーバの実行
+'''
+cd bin && ./main
+'''
+
+## テスト
 tkd53はテストフレームワークに[googletest](https://github.com/google/googletest)を使用しています。
 
 ### googletestをインストール
@@ -17,12 +29,12 @@ $ mkdir -p ../../../../../tests/bin/gtest
 $ cp libgtest.a libgtest_main.a ../../../../../tests/bin/gtest
 ```
 
-### テストを実行
-例えば、bigram_converterのテスト (bigram_converter_test) は次にようにして実行します。
+### テストの実行
+例えば、engineのテスト (engine_test) は次にようにして実行します。
 
 ```
-$ cd src/converter
+$ cd src/engine
 $ make test
-$ cd ../../tests/bin/converter/
-$ ./bigram_converter_test
+$ cd ../../tests/bin/engine/
+$ ./engine_test
 ```
