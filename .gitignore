@@ -2,4 +2,4 @@ tests/bin/
 tests/outputs
 *.o
 *~
-bin
+bin/main
