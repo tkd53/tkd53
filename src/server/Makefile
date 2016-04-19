@@ -7,7 +7,7 @@ GTEST_DIR = ../third_party/googletest/googletest
 GTEST_DEPS = ${GTEST_OBJ_DIR}/libgtest_main.a ${GTEST_OBJ_DIR}/libgtest.a
 
 CXX=g++
-# CXX = clang++
+# CXX=clang++
 WARNING_OPTIONS = -Wall -Wextra -Woverloaded-virtual -Werror # -fcolor-diagnostics
 INCLUDE_OPTIONS = -I../ -I../third_party
 CXXFLAGS = $(WARNING_OPTIONS) $(INCLUDE_OPTIONS) -std=c++11
